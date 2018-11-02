@@ -42,10 +42,12 @@ public class OrderItem implements Serializable {
     @Column(name = "status", nullable = false)
     private OrderItemStatus status;
 
-    @ManyToOne    @JsonIgnoreProperties("")
+    @ManyToOne(optional = false)    @NotNull
+    @JsonIgnoreProperties("")
     private Product product;
 
-    @ManyToOne    @JsonIgnoreProperties("orderItems")
+    @ManyToOne(optional = false)    @NotNull
+    @JsonIgnoreProperties("orderItems")
     private ProductOrder order;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -11,7 +11,7 @@ describe('Invoice e2e test', () => {
     let signInPage: SignInPage;
     let invoiceUpdatePage: InvoiceUpdatePage;
     let invoiceComponentsPage: InvoiceComponentsPage;
-    let invoiceDeleteDialog: InvoiceDeleteDialog;
+    /*let invoiceDeleteDialog: InvoiceDeleteDialog;*/
 
     before(async () => {
         await browser.get('/');
@@ -34,7 +34,7 @@ describe('Invoice e2e test', () => {
         await invoiceUpdatePage.cancel();
     });
 
-    it('should create and save Invoices', async () => {
+    /* it('should create and save Invoices', async () => {
         const nbButtonsBeforeCreate = await invoiceComponentsPage.countDeleteButtons();
 
         await invoiceComponentsPage.clickOnCreateButton();
@@ -48,23 +48,26 @@ describe('Invoice e2e test', () => {
         expect(await invoiceUpdatePage.getPaymentDateInput()).to.contain('2001-01-01T02:30');
         await invoiceUpdatePage.setPaymentAmountInput('5');
         expect(await invoiceUpdatePage.getPaymentAmountInput()).to.eq('5');
+        await invoiceUpdatePage.setCodeInput('code');
+        expect(await invoiceUpdatePage.getCodeInput()).to.eq('code');
         await invoiceUpdatePage.orderSelectLastOption();
         await invoiceUpdatePage.save();
         expect(await invoiceUpdatePage.getSaveButton().isPresent()).to.be.false;
 
         expect(await invoiceComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
-    });
+    });*/
 
-    it('should delete last Invoice', async () => {
+    /* it('should delete last Invoice', async () => {
         const nbButtonsBeforeDelete = await invoiceComponentsPage.countDeleteButtons();
         await invoiceComponentsPage.clickOnLastDeleteButton();
 
         invoiceDeleteDialog = new InvoiceDeleteDialog();
-        expect(await invoiceDeleteDialog.getDialogTitle()).to.eq('storeApp.invoice.delete.question');
+        expect(await invoiceDeleteDialog.getDialogTitle())
+            .to.eq('storeApp.invoice.delete.question');
         await invoiceDeleteDialog.clickOnConfirmButton();
 
         expect(await invoiceComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });
+    });*/
 
     after(async () => {
         await navBarPage.autoSignOut();

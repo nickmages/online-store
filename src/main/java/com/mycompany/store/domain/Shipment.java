@@ -35,7 +35,8 @@ public class Shipment implements Serializable {
     @Column(name = "details")
     private String details;
 
-    @ManyToOne    @JsonIgnoreProperties("shipments")
+    @ManyToOne(optional = false)    @NotNull
+    @JsonIgnoreProperties("shipments")
     private Invoice invoice;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
