@@ -43,8 +43,8 @@ describe('Customer e2e test', () => {
         await customerUpdatePage.setLastNameInput('lastName');
         expect(await customerUpdatePage.getLastNameInput()).to.eq('lastName');
         await customerUpdatePage.genderSelectLastOption();
-        await customerUpdatePage.setEmailInput('email');
-        expect(await customerUpdatePage.getEmailInput()).to.eq('email');
+        await customerUpdatePage.setEmailInput('email@email.com');
+        expect(await customerUpdatePage.getEmailInput()).to.eq('email@email.com');
         await customerUpdatePage.setPhoneInput('phone');
         expect(await customerUpdatePage.getPhoneInput()).to.eq('phone');
         await customerUpdatePage.setAddressLine1Input('addressLine1');
