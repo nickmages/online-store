@@ -11,7 +11,7 @@
 </div>
 <jhi-alert></jhi-alert>
 <br />
-<div *ngIf="products">
+<div *ngIf="products"> 
     <div class="mb-2 d-flex justify-content-end align-items-center">
         <span class="mr-2 col-2">Filter by name</span>
         <input type="search" class="form-control" [(ngModel)]="filter">
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="list-group">
-        <a [routerLink]="['../product', product.id ]" class="list-group-item list-group-item-action flex-column 
+        <a class="list-group-item list-group-item-action flex-column 
                align-items-start"
             *ngFor="let product of (products | pureFilter:filter:'name'); trackBy: trackId">
             <div class="row">
@@ -49,8 +49,8 @@
                         <h5 class="mb-1">{{product.name}}</h5>
                         <small *ngIf="product.productCategory">
                             <a [routerLink]="['../product-category', 
-                            product.productCategory?.id ]">
-                                Category: {{product.productCategory?name}}
+                            product.productCategory?.id, 'view' ]">
+                                Category: {{product.productCategory?.name}}
                             </a>
                         </small>
                     </div>
@@ -63,19 +63,25 @@
                             {{product.size}}
                         </span>
                     </small>
-                    <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
-                        <button type="submit" [routerLink]="['/', 
-                                            { outlets: { popup: 'product/'+ 
-                                            product.id + '/edit'} }]"
-                            replaceUrl="true" queryParamsHandling="merge" class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                    <div class="btn-group" role="group">
+                        <button type="submit"
+                                [routerLink]="['/product', product.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit" *jhiHasAnyAuthority="'ROLE_ADMIN'"
+                                [routerLink]="['/product', product.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
-                        <button type="submit" [routerLink]="['/', 
-                                            { outlets: { popup: 'product/'+ 
-                                             product.id + '/delete'} }]"
-                            replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                        <button type="submit" *jhiHasAnyAuthority="'ROLE_ADMIN'"
+                                [routerLink]="['/', { outlets: { popup: 'product/'+ product.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>
