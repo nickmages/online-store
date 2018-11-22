@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ProductCategoryComponentsPage, ProductCategoryDeleteDialog, ProductCategoryUpdatePage } from './product-category.page-object';
@@ -38,9 +38,8 @@ describe('ProductCategory e2e test', () => {
         const nbButtonsBeforeCreate = await productCategoryComponentsPage.countDeleteButtons();
 
         await productCategoryComponentsPage.clickOnCreateButton();
-        await productCategoryUpdatePage.setNameInput('name');
+        await promise.all([productCategoryUpdatePage.setNameInput('name'), productCategoryUpdatePage.setDescriptionInput('description')]);
         expect(await productCategoryUpdatePage.getNameInput()).to.eq('name');
-        await productCategoryUpdatePage.setDescriptionInput('description');
         expect(await productCategoryUpdatePage.getDescriptionInput()).to.eq('description');
         await productCategoryUpdatePage.save();
         expect(await productCategoryUpdatePage.getSaveButton().isPresent()).to.be.false;

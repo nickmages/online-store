@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, protractor } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { InvoiceComponentsPage, InvoiceDeleteDialog, InvoiceUpdatePage } from './invoice.page-object';
@@ -38,19 +38,21 @@ describe('Invoice e2e test', () => {
         const nbButtonsBeforeCreate = await invoiceComponentsPage.countDeleteButtons();
 
         await invoiceComponentsPage.clickOnCreateButton();
-        await invoiceUpdatePage.setDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
+        await promise.all([
+            invoiceUpdatePage.setDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            invoiceUpdatePage.setDetailsInput('details'),
+            invoiceUpdatePage.statusSelectLastOption(),
+            invoiceUpdatePage.paymentMethodSelectLastOption(),
+            invoiceUpdatePage.setPaymentDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            invoiceUpdatePage.setPaymentAmountInput('5'),
+            invoiceUpdatePage.setCodeInput('code'),
+            invoiceUpdatePage.orderSelectLastOption(),
+        ]);
         expect(await invoiceUpdatePage.getDateInput()).to.contain('2001-01-01T02:30');
-        await invoiceUpdatePage.setDetailsInput('details');
         expect(await invoiceUpdatePage.getDetailsInput()).to.eq('details');
-        await invoiceUpdatePage.statusSelectLastOption();
-        await invoiceUpdatePage.paymentMethodSelectLastOption();
-        await invoiceUpdatePage.setPaymentDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
         expect(await invoiceUpdatePage.getPaymentDateInput()).to.contain('2001-01-01T02:30');
-        await invoiceUpdatePage.setPaymentAmountInput('5');
         expect(await invoiceUpdatePage.getPaymentAmountInput()).to.eq('5');
-        await invoiceUpdatePage.setCodeInput('code');
         expect(await invoiceUpdatePage.getCodeInput()).to.eq('code');
-        await invoiceUpdatePage.orderSelectLastOption();
         await invoiceUpdatePage.save();
         expect(await invoiceUpdatePage.getSaveButton().isPresent()).to.be.false;
 

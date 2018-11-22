@@ -51,7 +51,8 @@ public class Product implements Serializable {
     @Column(name = "image_content_type")
     private String imageContentType;
 
-    @ManyToOne    @JsonIgnoreProperties("products")
+    @ManyToOne
+    @JsonIgnoreProperties("products")
     private ProductCategory productCategory;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

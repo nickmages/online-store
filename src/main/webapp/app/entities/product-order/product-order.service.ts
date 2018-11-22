@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IProductOrder[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ProductOrderService {
-    private resourceUrl = SERVER_API_URL + 'api/product-orders';
+    public resourceUrl = SERVER_API_URL + 'api/product-orders';
 
     constructor(private http: HttpClient) {}
 
@@ -49,22 +49,26 @@ export class ProductOrderService {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertDateFromClient(productOrder: IProductOrder): IProductOrder {
+    protected convertDateFromClient(productOrder: IProductOrder): IProductOrder {
         const copy: IProductOrder = Object.assign({}, productOrder, {
             placedDate: productOrder.placedDate != null && productOrder.placedDate.isValid() ? productOrder.placedDate.toJSON() : null
         });
         return copy;
     }
 
-    private convertDateFromServer(res: EntityResponseType): EntityResponseType {
-        res.body.placedDate = res.body.placedDate != null ? moment(res.body.placedDate) : null;
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+            res.body.placedDate = res.body.placedDate != null ? moment(res.body.placedDate) : null;
+        }
         return res;
     }
 
-    private convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-        res.body.forEach((productOrder: IProductOrder) => {
-            productOrder.placedDate = productOrder.placedDate != null ? moment(productOrder.placedDate) : null;
-        });
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach((productOrder: IProductOrder) => {
+                productOrder.placedDate = productOrder.placedDate != null ? moment(productOrder.placedDate) : null;
+            });
+        }
         return res;
     }
 }

@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, protractor } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ShipmentComponentsPage, ShipmentDeleteDialog, ShipmentUpdatePage } from './shipment.page-object';
@@ -38,13 +38,15 @@ describe('Shipment e2e test', () => {
         const nbButtonsBeforeCreate = await shipmentComponentsPage.countDeleteButtons();
 
         await shipmentComponentsPage.clickOnCreateButton();
-        await shipmentUpdatePage.setTrackingCodeInput('trackingCode');
+        await promise.all([
+            shipmentUpdatePage.setTrackingCodeInput('trackingCode'),
+            shipmentUpdatePage.setDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            shipmentUpdatePage.setDetailsInput('details'),
+            shipmentUpdatePage.invoiceSelectLastOption(),
+        ]);
         expect(await shipmentUpdatePage.getTrackingCodeInput()).to.eq('trackingCode');
-        await shipmentUpdatePage.setDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
         expect(await shipmentUpdatePage.getDateInput()).to.contain('2001-01-01T02:30');
-        await shipmentUpdatePage.setDetailsInput('details');
         expect(await shipmentUpdatePage.getDetailsInput()).to.eq('details');
-        await shipmentUpdatePage.invoiceSelectLastOption();
         await shipmentUpdatePage.save();
         expect(await shipmentUpdatePage.getSaveButton().isPresent()).to.be.false;
 

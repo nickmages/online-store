@@ -3,8 +3,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 import { UserRouteAccessService } from 'app/core';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { OrderItem } from 'app/shared/model/order-item.model';
 import { OrderItemService } from './order-item.service';
 import { OrderItemComponent } from './order-item.component';
@@ -17,10 +17,13 @@ import { IOrderItem } from 'app/shared/model/order-item.model';
 export class OrderItemResolve implements Resolve<IOrderItem> {
     constructor(private service: OrderItemService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<OrderItem> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id).pipe(map((orderItem: HttpResponse<OrderItem>) => orderItem.body));
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<OrderItem>) => response.ok),
+                map((orderItem: HttpResponse<OrderItem>) => orderItem.body)
+            );
         }
         return of(new OrderItem());
     }
