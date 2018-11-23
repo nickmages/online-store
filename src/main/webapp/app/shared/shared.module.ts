@@ -12,4 +12,10 @@ import { StoreSharedLibsModule, StoreSharedCommonModule, JhiLoginModalComponent,
     exports: [StoreSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class StoreSharedModule {}
+export class StoreSharedModule {
+    static forRoot() {
+        return {
+            ngModule: StoreSharedModule
+        };
+    }
+}

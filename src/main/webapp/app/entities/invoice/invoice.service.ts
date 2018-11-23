@@ -14,7 +14,7 @@ type EntityArrayResponseType = HttpResponse<IInvoice[]>;
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceService {
-    private resourceUrl = SERVER_API_URL + 'api/invoices';
+    public resourceUrl = SERVER_API_URL + 'api/invoices';
 
     constructor(private http: HttpClient) {}
 
@@ -49,7 +49,7 @@ export class InvoiceService {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertDateFromClient(invoice: IInvoice): IInvoice {
+    protected convertDateFromClient(invoice: IInvoice): IInvoice {
         const copy: IInvoice = Object.assign({}, invoice, {
             date: invoice.date != null && invoice.date.isValid() ? invoice.date.toJSON() : null,
             paymentDate: invoice.paymentDate != null && invoice.paymentDate.isValid() ? invoice.paymentDate.toJSON() : null
@@ -57,17 +57,21 @@ export class InvoiceService {
         return copy;
     }
 
-    private convertDateFromServer(res: EntityResponseType): EntityResponseType {
-        res.body.date = res.body.date != null ? moment(res.body.date) : null;
-        res.body.paymentDate = res.body.paymentDate != null ? moment(res.body.paymentDate) : null;
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+            res.body.date = res.body.date != null ? moment(res.body.date) : null;
+            res.body.paymentDate = res.body.paymentDate != null ? moment(res.body.paymentDate) : null;
+        }
         return res;
     }
 
-    private convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-        res.body.forEach((invoice: IInvoice) => {
-            invoice.date = invoice.date != null ? moment(invoice.date) : null;
-            invoice.paymentDate = invoice.paymentDate != null ? moment(invoice.paymentDate) : null;
-        });
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach((invoice: IInvoice) => {
+                invoice.date = invoice.date != null ? moment(invoice.date) : null;
+                invoice.paymentDate = invoice.paymentDate != null ? moment(invoice.paymentDate) : null;
+            });
+        }
         return res;
     }
 }

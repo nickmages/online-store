@@ -56,7 +56,7 @@ public class ShipmentResourceIntTest {
 
     @Autowired
     private ShipmentRepository shipmentRepository;
-    
+
     @Autowired
     private ShipmentService shipmentService;
 

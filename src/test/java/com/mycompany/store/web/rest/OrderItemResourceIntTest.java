@@ -57,7 +57,7 @@ public class OrderItemResourceIntTest {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
-    
+
     @Autowired
     private OrderItemService orderItemService;
 

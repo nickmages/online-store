@@ -37,7 +37,8 @@ public class OrderItemService {
      * @return the persisted entity
      */
     public OrderItem save(OrderItem orderItem) {
-        log.debug("Request to save OrderItem : {}", orderItem);        return orderItemRepository.save(orderItem);
+        log.debug("Request to save OrderItem : {}", orderItem);
+        return orderItemRepository.save(orderItem);
     }
 
     /**

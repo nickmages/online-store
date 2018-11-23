@@ -57,7 +57,7 @@ public class ProductOrderResourceIntTest {
 
     @Autowired
     private ProductOrderRepository productOrderRepository;
-    
+
     @Autowired
     private ProductOrderService productOrderService;
 

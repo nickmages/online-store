@@ -4,7 +4,7 @@
       "packageName": "com.mycompany.store",
       "nativeLanguage": "en"
     },
-    "jhipsterVersion": "5.4.0",
+    "jhipsterVersion": "5.7.0",
     "applicationType": "monolith",
     "baseName": "store",
     "packageName": "com.mycompany.store",
@@ -36,6 +36,7 @@
       "en",
       "zh-cn",
       "fr"
-    ]
+    ],
+    "otherModules": []
   }
 }

@@ -71,7 +71,7 @@ public class InvoiceResourceIntTest {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
-    
+
     @Autowired
     private InvoiceService invoiceService;
 

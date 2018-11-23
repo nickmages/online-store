@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { CustomerComponentsPage, CustomerDeleteDialog, CustomerUpdatePage } from './customer.page-object';
@@ -37,24 +37,29 @@ describe('Customer e2e test', () => {
     it('should create and save Customers', async () => {
         const nbButtonsBeforeCreate = await customerComponentsPage.countDeleteButtons();
         await customerComponentsPage.clickOnCreateButton();
-        await customerUpdatePage.setFirstNameInput('firstName');
+        await promise.all([
+            customerUpdatePage.setFirstNameInput('firstName'),
+            customerUpdatePage.setLastNameInput('lastName'),
+            customerUpdatePage.genderSelectLastOption(),
+            customerUpdatePage.setEmailInput('email'),
+            customerUpdatePage.setPhoneInput('phone'),
+            customerUpdatePage.setAddressLine1Input('addressLine1'),
+            customerUpdatePage.setAddressLine2Input('addressLine2'),
+            customerUpdatePage.setCityInput('city'),
+            customerUpdatePage.setCountryInput('country'),
+            customerUpdatePage.userSelectLastOption(),
+        ]);
         expect(await customerUpdatePage.getFirstNameInput()).to.eq('firstName');
-        await customerUpdatePage.setLastNameInput('lastName');
         expect(await customerUpdatePage.getLastNameInput()).to.eq('lastName');
         await customerUpdatePage.genderSelectLastOption();
         await customerUpdatePage.setEmailInput('email@email.com');
         expect(await customerUpdatePage.getEmailInput()).to.eq('email@email.com');
         await customerUpdatePage.setPhoneInput('phone');
         expect(await customerUpdatePage.getPhoneInput()).to.eq('phone');
-        await customerUpdatePage.setAddressLine1Input('addressLine1');
         expect(await customerUpdatePage.getAddressLine1Input()).to.eq('addressLine1');
-        await customerUpdatePage.setAddressLine2Input('addressLine2');
         expect(await customerUpdatePage.getAddressLine2Input()).to.eq('addressLine2');
-        await customerUpdatePage.setCityInput('city');
         expect(await customerUpdatePage.getCityInput()).to.eq('city');
-        await customerUpdatePage.setCountryInput('country');
         expect(await customerUpdatePage.getCountryInput()).to.eq('country');
-        await customerUpdatePage.userSelectLastOption();
         await customerUpdatePage.save();
         expect(await customerUpdatePage.getSaveButton().isPresent()).to.be.false;
 

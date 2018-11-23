@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { OrderItemComponentsPage, OrderItemDeleteDialog, OrderItemUpdatePage } from './order-item.page-object';
@@ -38,13 +38,15 @@ describe('OrderItem e2e test', () => {
         const nbButtonsBeforeCreate = await orderItemComponentsPage.countDeleteButtons();
 
         await orderItemComponentsPage.clickOnCreateButton();
-        await orderItemUpdatePage.setQuantityInput('5');
+        await promise.all([
+            orderItemUpdatePage.setQuantityInput('5'),
+            orderItemUpdatePage.setTotalPriceInput('5'),
+            orderItemUpdatePage.statusSelectLastOption(),
+            orderItemUpdatePage.productSelectLastOption(),
+            orderItemUpdatePage.orderSelectLastOption(),
+        ]);
         expect(await orderItemUpdatePage.getQuantityInput()).to.eq('5');
-        await orderItemUpdatePage.setTotalPriceInput('5');
         expect(await orderItemUpdatePage.getTotalPriceInput()).to.eq('5');
-        await orderItemUpdatePage.statusSelectLastOption();
-        await orderItemUpdatePage.productSelectLastOption();
-        await orderItemUpdatePage.orderSelectLastOption();
         await orderItemUpdatePage.save();
         expect(await orderItemUpdatePage.getSaveButton().isPresent()).to.be.false;
 

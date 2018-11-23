@@ -3,8 +3,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 import { UserRouteAccessService } from 'app/core';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Customer } from 'app/shared/model/customer.model';
 import { CustomerService } from './customer.service';
 import { CustomerComponent } from './customer.component';
@@ -17,10 +17,13 @@ import { ICustomer } from 'app/shared/model/customer.model';
 export class CustomerResolve implements Resolve<ICustomer> {
     constructor(private service: CustomerService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Customer> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id).pipe(map((customer: HttpResponse<Customer>) => customer.body));
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<Customer>) => response.ok),
+                map((customer: HttpResponse<Customer>) => customer.body)
+            );
         }
         return of(new Customer());
     }

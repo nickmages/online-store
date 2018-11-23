@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, protractor } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { ProductOrderComponentsPage, ProductOrderDeleteDialog, ProductOrderUpdatePage } from './product-order.page-object';
@@ -38,12 +38,14 @@ describe('ProductOrder e2e test', () => {
         const nbButtonsBeforeCreate = await productOrderComponentsPage.countDeleteButtons();
 
         await productOrderComponentsPage.clickOnCreateButton();
-        await productOrderUpdatePage.setPlacedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
+        await promise.all([
+            productOrderUpdatePage.setPlacedDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            productOrderUpdatePage.statusSelectLastOption(),
+            productOrderUpdatePage.setCodeInput('code'),
+            productOrderUpdatePage.customerSelectLastOption(),
+        ]);
         expect(await productOrderUpdatePage.getPlacedDateInput()).to.contain('2001-01-01T02:30');
-        await productOrderUpdatePage.statusSelectLastOption();
-        await productOrderUpdatePage.setCodeInput('code');
         expect(await productOrderUpdatePage.getCodeInput()).to.eq('code');
-        await productOrderUpdatePage.customerSelectLastOption();
         await productOrderUpdatePage.save();
         expect(await productOrderUpdatePage.getSaveButton().isPresent()).to.be.false;
 
